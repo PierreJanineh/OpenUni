@@ -130,7 +130,7 @@ public class Time2 {
      * @return boolean true if this time is after other time, otherwise return false.
      */
     public boolean after(Time2 other) {
-        return other.secFromMidnight() < _secFromMid;
+        return other.before(this);
     }
 
     /**

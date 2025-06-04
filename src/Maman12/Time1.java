@@ -107,7 +107,7 @@ public class Time1 {
     /**
      * Checks if this time is before a received time.
      * @param other The time to check if this time is before.
-     * @return True if this time is after other time.
+     * @return True if this time is before other time.
      */
     public boolean before(Time1 other) {
         return _hour < other._hour ||
@@ -121,9 +121,7 @@ public class Time1 {
      * @return True if this time is after other time.
      */
     public boolean after(Time1 other) {
-        return _hour > other._hour ||
-                (_hour == other._hour && _minute > other._minute) ||
-                (_hour == other._hour && _minute == other._minute && _second > other._second);
+        return other.before(this);
     }
 
     /**
