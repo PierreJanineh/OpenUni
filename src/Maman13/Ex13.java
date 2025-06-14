@@ -1,7 +1,5 @@
 package Maman13;
 
-import java.util.ArrayList;
-
 public class Ex13 {
     public static void main(String[] args) {
         // First Question: //
