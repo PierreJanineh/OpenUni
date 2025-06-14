@@ -114,73 +114,85 @@ public class Ex13 {
      * @return The number of subsequences of elements in the array that their sums and counts are equal to a given value.
      */
     public static int countEqualDiff(int[] arr, int diff) {
-        ArrayList<Integer> group1 = new ArrayList<>();
-        ArrayList<Integer> group2 = new ArrayList<>();
-        return countEqualDiffHelper(arr, 0, group1, group2, diff);
+        int[] group1 = new int[arr.length];
+        int[] group2 = new int[arr.length];
+        return countEqualDiffHelper(arr, 0, 0, 0, group1, 0, 0, 0, group2, 0, diff);
     }
 
     /**
      * Recursive helper method for countEqualDiff.
-     * @param arr The array to count subsequences in.
-     * @param index The current index in the recursion.
-     * @param group1 The first grouping of elements in the array. This grouping will be modified during the recursion.
-     * @param group2 The second grouping of elements in the array. This grouping will be modified during the recursion.
-     * @param diff The diff value that counts and sums should be equal to.
-     * @return The number of subsequences of elements in the array that their sums and counts are equal to a given value.
+     * @param arr The input array of integers.
+     * @param index The current index being processed in the array.
+     * @param sum1 The sum of elements in group1.
+     * @param size1 The size (number of elements) in group1.
+     * @param group1 The array to hold elements of group1 during recursion.
+     * @param group1Index The current index in `group1` array for tracking elements.
+     * @param sum2 The sum of elements in group2.
+     * @param size2 The size (number of elements) in group2.
+     * @param group2 The array to hold elements of group2 during recursion.
+     * @param group2Index The current index in `group2` array for tracking elements.
+     * @param diff The target difference between sums and sizes of the two groups.
+     * @return The number of valid groupings where the absolute difference equals `diff`.
      */
-    private static int countEqualDiffHelper(int[] arr, int index,
-                                        ArrayList<Integer> group1,
-                                        ArrayList<Integer> group2,
-                                        int diff) {
+    private static int countEqualDiffHelper(
+            int[] arr, int index,
+            int sum1, int size1, int[] group1, int group1Index,
+            int sum2, int size2, int[] group2, int group2Index,
+            int diff
+    ) {
+        // Base case: When all elements have been processed
         if (index == arr.length) {
-            if (isValidGrouping(group1, group2, diff)) {
-                printGroups(group1, group2);
-                return 1;
+            // Check if the grouping satisfies the condition
+            if (Math.abs(sum1 - sum2) == diff && Math.abs(size1 - size2) == diff) {
+                printGroups(group1, group1Index, group2, group2Index); // Print the groupings
+                return 1; // Valid grouping
             }
-            return 0;
+            return 0; // Invalid grouping
         }
 
-        group1.add(arr[index]);
-        int count1 = countEqualDiffHelper(arr, index + 1, group1, group2, diff);
-        group1.remove(group1.size() - 1);
+        // Recursive case: Process the current element at `index`
+        int count = 0;
 
-        group2.add(arr[index]);
-        int count2 = countEqualDiffHelper(arr, index + 1, group1, group2, diff);
-        group2.remove(group2.size() - 1);
+        // Option 1: Add arr[index] to group1
+        group1[group1Index] = arr[index];
+        count += countEqualDiffHelper(
+                arr, index + 1,
+                sum1 + arr[index], size1 + 1, group1, group1Index + 1,
+                sum2, size2, group2, group2Index,
+                diff
+        );
 
-        return count1 + count2;
+        // Option 2: Add arr[index] to group2
+        group2[group2Index] = arr[index];
+        count += countEqualDiffHelper(
+                arr, index + 1,
+                sum1, size1, group1, group1Index,
+                sum2 + arr[index], size2 + 1, group2, group2Index + 1,
+                diff
+        );
+
+        return count;
     }
 
     /**
      * Helper method for countEqualDiff. Prints the current grouping of elements in the array.
-     * @param group1 The current grouping of elements in the array.
-     * @param group2 The current grouping of elements in the array.
+     * @param group1 The array holding elements of group1.
+     * @param group1Size The current number of elements in group1.
+     * @param group2 The array holding elements of group2.
+     * @param group2Size The current number of elements in group2.
      */
-    private static void printGroups(ArrayList<Integer> group1,
-                                    ArrayList<Integer> group2) {
-        System.out.println("Group 1: " + group1);
-        System.out.println("Group 2: " + group2);
-        System.out.println("-------------------");
-    }
-
-    /**
-     * Helper method for countEqualDiff. Checks if the current grouping of elements in the array meets the requirements.
-     * @param group1 The current grouping of elements in the array. This grouping will be modified during the recursion.
-     * @param group2 The current grouping of elements in the array. This grouping will be modified during the recursion.
-     * @param diff The diff value that counts and sums should be equal to.
-     * @return true if the current grouping of elements in the array meets the requirements, false otherwise.
-     */
-    private static boolean isValidGrouping(ArrayList<Integer> group1,
-                                           ArrayList<Integer> group2,
-                                           int diff) {
-        if (Math.abs(group1.size() - group2.size()) != diff) {
-            return false;
+    private static void printGroups(int[] group1, int group1Size, int[] group2, int group2Size) {
+        System.out.print("Group 1: ");
+        for (int i = 0; i < group1Size; i++) {
+            System.out.print(group1[i] + " ");
         }
+        System.out.println();
 
-        int sum1 = group1.stream().mapToInt(Integer::intValue).sum();
-        int sum2 = group2.stream().mapToInt(Integer::intValue).sum();
-
-        return Math.abs(sum1 - sum2) == diff;
+        System.out.print("Group 2: ");
+        for (int i = 0; i < group2Size; i++) {
+            System.out.print(group2[i] + " ");
+        }
+        System.out.println("\n-------------------");
     }
 
 
