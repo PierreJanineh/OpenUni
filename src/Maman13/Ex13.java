@@ -90,32 +90,20 @@ public class Ex13 {
     /**
      * Check if there exists any subsequence of elements in the array that sum to k.
      * A subsequence can include any non-contiguous elements from the original array.
-     * Time complexity: O(2^n), due to the number of leaf nodes (2^n) that this method will make. Each node will require O(n) operations to compute sum.
-     * Space complexity: O(n), due to the space used by the recursion stack. Which is proportional to array length.
+     * Time complexity: O(n), The array is traversed once, processing each element a single time.
+     * Space complexity: O(1), The algorithm uses only a constant amount of additional memory, irrespective of the input size.
      * @param arr The input array.
      * @param k The target sum to find.
      * @return true if there exists a subsequence that sums to k, false otherwise.
      */
     public static boolean superInc(int[] arr, int k) {
-        return superIncHelper(arr, k, 0);
-    }
-
-    /**
-     * Recursive helper method for superInc.
-     * @param arr The input array.
-     * @param remaining The target sum to find.
-     * @param index The current index in the recursion.
-     * @return true if there exists a subsequence that sums to k, false otherwise.
-     */
-    private static boolean superIncHelper(int[] arr, int remaining, int index) {
-        if (remaining == 0) return true;
-        if (index >= arr.length || remaining < 0) return false;
-
-        if (superIncHelper(arr, remaining - arr[index], index + 1)) {
-            return true;
+        for (int i = arr.length - 1; i >= 0; i--) {
+            if (k >= arr[i]) {
+                k -= arr[i];
+            }
+            if (k == 0) return true;
         }
-
-        return superIncHelper(arr, remaining, index + 1);
+        return false;
     }
 
     // Third Question: //
