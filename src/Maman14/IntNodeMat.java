@@ -1,11 +1,10 @@
- 
-
+ package Maman14;
 
 /**
  * Write a description of class IntNodeMat here.
  *
- * @author (your name)
- * @version (a version number or a date)
+ * @author (Pierre Janineh)
+ * @version (June 14, 2025)
  */
 public class IntNodeMat
 {
